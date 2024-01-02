@@ -1,7 +1,7 @@
 {
   "name": "designsystem",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -85,6 +85,5 @@
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
   },
-  "readme": "ERROR: No README data found!",
-  "_id": "designsystem@0.0.0"
+  "readme": "ERROR: No README data found!"
 }
