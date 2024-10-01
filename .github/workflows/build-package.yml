@@ -1,0 +1,56 @@
+name: Build and Publish NPM Package
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '22'
+
+    - name: Cache Node modules
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Increment patch version
+      run: npm version patch
+
+    - name: Build package
+      run: npm run build
+
+    - name: Publish to GitHub Packages
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Create Build Tag
+      run: |
+        PACKAGE_VERSION=$(node -p -e "require('./package.json').version")
+        git tag -a "build-v$PACKAGE_VERSION" -m "Build version $PACKAGE_VERSION"
+        git push origin "build-v$PACKAGE_VERSION"
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          tag_name: ${{ env.PACKAGE_VERSION }}
+          release_name: Release ${{ env.PACKAGE_VERSION }}
+          body: "Description of the changes or features in this release"
+          draft: false
+          prerelease: false
