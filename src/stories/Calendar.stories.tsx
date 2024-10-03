@@ -3,16 +3,21 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { Calendar } from "@/components/ui/calendar";
+import { DayPickerSingleProps, SelectRangeEventHandler } from "react-day-picker";
 
-export function CalendarDemo() {
+type CalendarDemoProps = DayPickerSingleProps | { onSelect: SelectRangeEventHandler };
+
+export function CalendarDemo(props: CalendarDemoProps) {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
+
 
   return (
     <Calendar
       mode="single"
       selected={date}
-      onSelect={setDate}
       className="rounded-md border"
+      {...props}
+      onSelect={(_, dateNew) => setDate(dateNew)}
     />
   );
 }
@@ -30,9 +35,9 @@ const meta = {
 } satisfies Meta<typeof Calendar>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<CalendarDemoProps>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary: Story = {
-  render: (props) => <CalendarDemo {...props} />,
+  render: (props: CalendarDemoProps) => <CalendarDemo {...props} />,
 };

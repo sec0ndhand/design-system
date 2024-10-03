@@ -12,10 +12,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { AlertDialogProps } from "@radix-ui/react-alert-dialog";
 
-export function AlertDialogDemo() {
+export function AlertDialogDemo(props: AlertDialogProps) {
   return (
-    <AlertDialog>
+    <AlertDialog {...props}>
       <AlertDialogTrigger asChild>
         <Button variant="outline">Show Dialog</Button>
       </AlertDialogTrigger>
@@ -49,7 +50,7 @@ const meta = {
 } satisfies Meta<typeof AlertDialog>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<AlertDialogProps>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary: Story = {

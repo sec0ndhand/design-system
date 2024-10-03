@@ -6,10 +6,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AccordionMultipleProps } from "@radix-ui/react-accordion";
 
-export function AccordionDemo() {
+export function AccordionDemo(props: AccordionMultipleProps) {
   return (
-    <Accordion type="single" collapsible className="w-full">
+    <Accordion className="w-full" {...props}>
       <AccordionItem value="item-1">
         <AccordionTrigger>Is it accessible?</AccordionTrigger>
         <AccordionContent>
@@ -35,19 +36,18 @@ export function AccordionDemo() {
 }
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-const meta = {
+const meta: Meta<typeof Accordion> = {
   title: "Components/Accordion",
   component: Accordion,
   parameters: {
-    // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/react/configure/story-layout
     layout: "centered",
   },
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/react/writing-docs/autodocs
   tags: ["autodocs"],
-} satisfies Meta<typeof Accordion>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+
+type Story = StoryObj<AccordionMultipleProps>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary: Story = {

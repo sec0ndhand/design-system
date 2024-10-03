@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 ("use client");
 
 import * as React from "react";
-import { ChevronsUpDown, Plus, X } from "lucide-react";
+import { ChevronsUpDown} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
