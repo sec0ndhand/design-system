@@ -11,6 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+
+    - name: Setup Git identity
+      run: |
+        git config --global user.email "github.actions@github.com"
+        git config --global user.name "Github Actions"
+
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
