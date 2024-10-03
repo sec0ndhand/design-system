@@ -39,13 +39,10 @@ jobs:
     - name: Build package
       run: npm run build
 
-    - name: Setup .npmrc file for GitHub Packages
+    - name: Setup .npmrc for GitHub Packages
       run: |
-        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > .npmrc
-        echo "@${GITHUB_REPOSITORY}:registry=https://npm.pkg.github.com" >> .npmrc
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_REPOSITORY: ${{ github.repository }}
+        echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" > .npmrc
+        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
     - name: Publish to GitHub Packages
       run: npm publish
