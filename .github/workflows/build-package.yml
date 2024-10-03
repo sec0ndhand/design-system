@@ -18,17 +18,10 @@ jobs:
         git config --global user.name "Github Actions"
 
     - name: Setup Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: '22'
-
-    - name: Cache Node modules
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+        cache: 'npm'  # Better caching in the latest version
 
     - name: Install dependencies
       run: npm ci
@@ -41,13 +34,14 @@ jobs:
 
     - name: Setup .npmrc for GitHub Packages
       run: |
-        echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" > .npmrc
-        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
+        echo "registry=https://npm.pkg.github.com/" > ~/.npmrc
+        echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" >> ~/.npmrc
+        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
 
     - name: Publish to GitHub Packages
       run: npm publish
       env:
-        NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Build Tag
       run: |
@@ -58,10 +52,10 @@ jobs:
     - name: Create Release
       uses: actions/create-release@v1
       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-          tag_name: ${{ env.PACKAGE_VERSION }}
-          release_name: Release ${{ env.PACKAGE_VERSION }}
-          body: ${{ github.event.head_commit.message }}
-          draft: false
-          prerelease: false
+        tag_name: "build-v${{ env.PACKAGE_VERSION }}"  # Fixed the env variable issue
+        release_name: Release ${{ env.PACKAGE_VERSION }}
+        body: ${{ github.event.head_commit.message }}
+        draft: false
+        prerelease: false
