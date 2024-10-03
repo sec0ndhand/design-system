@@ -1,19 +1,19 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
-"use client"
+("use client");
 
-import * as React from "react"
-import { ChevronsUpDown, Plus, X } from "lucide-react"
+import * as React from "react";
+import { ChevronsUpDown, Plus, X } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 
 export function CollapsibleDemo() {
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
     <Collapsible
@@ -44,19 +44,19 @@ export function CollapsibleDemo() {
         </div>
       </CollapsibleContent>
     </Collapsible>
-  )
+  );
 }
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
-  title: 'Components/Collapsible',
+  title: "Components/Collapsible",
   component: Collapsible,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/react/configure/story-layout
-    layout: 'centered',
+    layout: "centered",
   },
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/react/writing-docs/autodocs
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 } satisfies Meta<typeof Collapsible>;
 
 export default meta;
@@ -64,9 +64,5 @@ type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary: Story = {
-    render: (props) => <CollapsibleDemo {...props} >Test</CollapsibleDemo>
-
+  render: (props) => <CollapsibleDemo {...props}>Test</CollapsibleDemo>,
 };
-
-
-

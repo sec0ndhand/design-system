@@ -1,7 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
-
-import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export function AspectRatioDemo() {
   return (
@@ -12,21 +11,19 @@ export function AspectRatioDemo() {
         className="rounded-md object-cover"
       />
     </AspectRatio>
-  )
+  );
 }
-
-
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
-  title: 'Components/AspectRatio',
+  title: "Components/AspectRatio",
   component: AspectRatio,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/react/configure/story-layout
-    layout: 'centered',
+    layout: "centered",
   },
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/react/writing-docs/autodocs
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 } satisfies Meta<typeof AspectRatio>;
 
 export default meta;
@@ -34,8 +31,5 @@ type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary: Story = {
-    render: (props) => <AspectRatioDemo {...props} />
+  render: (props) => <AspectRatioDemo {...props} />,
 };
-
-
-
