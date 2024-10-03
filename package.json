@@ -1,6 +1,10 @@
 {
-  "name": "designsystem",
+  "name": "@sec0ndhand/designsystem",
   "version": "0.0.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sec0ndhand/designsystem.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",

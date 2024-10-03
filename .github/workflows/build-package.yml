@@ -33,6 +33,11 @@ jobs:
       - name: Increment patch version
         run: npm version patch
 
+
+      - run: echo "node auth token set- $NODE_AUTH_TOKEN"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
