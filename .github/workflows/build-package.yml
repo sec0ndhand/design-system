@@ -7,55 +7,43 @@ on:
       - main
 
 jobs:
-  build-and-publish:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      # Setup .npmrc file to publish to GitHub Packages
 
-    - name: Setup Git identity
-      run: |
-        git config --global user.email "github.actions@github.com"
-        git config --global user.name "Github Actions"
+      - name: Setup Git identity
+        run: |
+          git config --global user.email "github.actions@github.com"
+          git config --global user.name "Github Actions"
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '22'
-        cache: 'npm'  # Better caching in the latest version
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://npm.pkg.github.com'
+          # Defaults to the user or organization that owns the workflow file
+          scope: '@sec0ndhand'
 
-    - name: Install dependencies
-      run: npm ci
+      - run: npm ci
 
-    - name: Increment patch version
-      run: npm version patch
+      - name: Increment patch version
+        run: npm version patch
 
-    - name: Build package
-      run: npm run build
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Setup .npmrc for GitHub Packages
-      run: |
-        echo "registry=https://npm.pkg.github.com/" > ~/.npmrc
-        echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" >> ~/.npmrc
-        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
-
-    - name: Publish to GitHub Packages
-      run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Create Build Tag
-      run: |
-        PACKAGE_VERSION=$(node -p -e "require('./package.json').version")
-        git tag -a "build-v$PACKAGE_VERSION" -m "Build version $PACKAGE_VERSION"
-        git push origin "build-v$PACKAGE_VERSION"
-
-    - name: Create Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: "build-v${{ env.PACKAGE_VERSION }}"  # Fixed the env variable issue
-        release_name: Release ${{ env.PACKAGE_VERSION }}
-        body: ${{ github.event.head_commit.message }}
-        draft: false
-        prerelease: false
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "build-v${{ env.PACKAGE_VERSION }}"  # Fixed the env variable issue
+          release_name: Release ${{ env.PACKAGE_VERSION }}
+          body: ${{ github.event.head_commit.message }}
+          draft: false
+          prerelease: false
