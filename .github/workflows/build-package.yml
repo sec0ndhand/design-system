@@ -12,14 +12,10 @@ jobs:
     permissions:
       contents: read
       packages: write
+    # don't run the workflow if the commit message contains [skip ci]
+    if: github.event_name == 'push' && !contains(github.event.head_commit.message, 'skip ci')
     steps:
       - uses: actions/checkout@v4
-      # Setup .npmrc file to publish to GitHub Packages
-
-      - name: Setup Git identity
-        run: |
-          git config --global user.email "github.actions@github.com"
-          git config --global user.name "Github Actions"
 
       - uses: actions/setup-node@v4
         with:
@@ -33,10 +29,16 @@ jobs:
       - name: Increment patch version
         run: npm version patch
 
+      - name: Commit Package version
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git commit -am "skip ci: Bump version to $(node -p "require('./package.json').version")"
+          git push
 
-      - run: echo "node auth token set- $NODE_AUTH_TOKEN"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get package version
+        id: package_version
+        run: echo ::set-output name=PACKAGE_VERSION::$(node -p "require('./package.json').version")
 
       - run: npm publish
         env:
